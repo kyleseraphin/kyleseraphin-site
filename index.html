@@ -89,10 +89,10 @@
           <h2 id="watch-h">Latest Stream</h2>
           <a class="more" href="https://www.youtube.com/@KyleSeraphin/live" target="_blank" rel="noopener">Watch live →</a>
         </div>
-        <!-- YouTube uploads-playlist embed (channel UCHw_D9gnxTOrzbq-ICvMMIA -> playlist UUHw_...): newest upload first.
-             Live streams appear here once they end; the "Watch live" link above goes to the live stream while it's on. -->
+        <!-- YouTube: main.js loads the newest daily episode from latest-video.json (kept fresh by the GitHub Action in .github/workflows).
+             Falls back to the uploads playlist if that file is missing. -->
         <div class="video">
-          <iframe title="Latest from Kyle Seraphin on YouTube"
+          <iframe id="yt-latest" title="Latest from Kyle Seraphin on YouTube"
             src="https://www.youtube-nocookie.com/embed/videoseries?list=UUHw_D9gnxTOrzbq-ICvMMIA"
             loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

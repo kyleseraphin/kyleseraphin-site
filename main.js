@@ -89,3 +89,16 @@
     box.innerHTML=''; box.appendChild(f);
   });
 })();
+
+/* Latest daily YouTube episode: latest-video.json is refreshed every 20 min by a GitHub Action. */
+(function(){
+  var f=document.getElementById('yt-latest'); if(!f) return;
+  fetch('latest-video.json?t='+Math.floor(Date.now()/600000),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():Promise.reject();})
+    .then(function(d){
+      if(d&&/^[A-Za-z0-9_-]{11}$/.test(d.id)){
+        f.src='https://www.youtube-nocookie.com/embed/'+d.id+'?rel=0';
+        if(d.title) f.title=d.title;
+      }
+    }).catch(function(){});
+})();
