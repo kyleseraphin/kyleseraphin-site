@@ -116,3 +116,16 @@
     var b=document.createElement('b'); b.textContent=fmt(+p.count); li.appendChild(b); ul.appendChild(li);
   });
 })();
+
+/* Apple Podcasts chart rank badge (chart-rank.json is refreshed by the GitHub Action) */
+(function(){
+  var a=document.getElementById('chart-badge'); if(!a) return;
+  fetch('chart-rank.json?t='+Math.floor(Date.now()/600000),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():Promise.reject();})
+    .then(function(d){
+      if(!d||!d.rank) return;
+      a.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="apg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F452FF"/><stop offset="1" stop-color="#832BC1"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#apg)"/><path fill="#fff" d="M12 5.2a5.6 5.6 0 0 0-3.2 10.2.6.6 0 1 0 .7-1A4.4 4.4 0 1 1 14.5 14.4a.6.6 0 1 0 .7 1A5.6 5.6 0 0 0 12 5.2zm0 2.6a3 3 0 0 0-1.8 5.4.6.6 0 0 0 .7-1 1.8 1.8 0 1 1 2.2 0 .6.6 0 0 0 .7 1A3 3 0 0 0 12 7.8zm0 3.5a1.2 1.2 0 0 0-1.2 1.2l.4 4.6a.8.8 0 0 0 1.6 0l.4-4.6a1.2 1.2 0 0 0-1.2-1.2z"/></svg>'+
+        '<span class="rank">#'+d.rank+'</span><span>in '+(d.category||'Politics')+'</span><span class="sub">· Apple Podcasts '+(d.country||'US')+'</span>';
+      a.hidden=false;
+    }).catch(function(){});
+})();

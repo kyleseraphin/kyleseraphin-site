@@ -152,7 +152,7 @@ textarea{resize:vertical;min-height:120px}
 .reach-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .reach-list li{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted)}
 .reach-list li b{color:var(--text);font-weight:800;margin-left:4px}
-@media (max-width:720px){.reach{text-align:center}.reach-total,.reach-list{justify-content:center}}
+@media (max-width:720px){.reach{text-align:center}.chart-badge{margin-left:auto;margin-right:auto}.reach-total,.reach-list{justify-content:center}}
 
 /* About + topics (SEO) */
 .about h2{margin:0 0 10px}
@@ -160,3 +160,11 @@ textarea{resize:vertical;min-height:120px}
 .about p strong{color:var(--text)}
 .topics{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .topics li{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(239,32,32,.12);border:1px solid rgba(239,32,32,.35);color:var(--text)}
+
+/* Apple Podcasts chart badge */
+.chart-badge{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:6px 12px 6px 8px;border-radius:999px;background:rgba(160,80,255,.12);border:1px solid rgba(180,110,255,.4);color:var(--text);font-size:13px;font-weight:700;text-decoration:none}
+.chart-badge:hover{border-color:rgba(200,140,255,.8)}
+.chart-badge svg{width:18px;height:18px;flex:none}
+.chart-badge .rank{font-size:16px;font-weight:900}
+.chart-badge .sub{color:var(--muted);font-weight:600}
+.chart-badge span{white-space:nowrap}
