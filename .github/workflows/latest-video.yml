@@ -1,0 +1,40 @@
+name: Update latest daily episode
+on:
+  schedule:
+    - cron: "*/20 * * * *"   # every 20 minutes
+  workflow_dispatch:          # lets you run it by hand from the Actions tab
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find newest daily episode (title ends in "| Ep ###")
+        run: |
+          python3 - <<'PY'
+          import json, re, urllib.request, html
+          url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCHw_D9gnxTOrzbq-ICvMMIA"
+          xml = urllib.request.urlopen(url, timeout=30).read().decode("utf-8")
+          entries = re.findall(r"<entry>.*?<yt:videoId>(.*?)</yt:videoId>.*?<title>(.*?)</title>.*?<published>(.*?)</published>", xml, re.S)
+          daily = [e for e in entries if re.search(r"\|\s*Ep\.?\s*\d+\s*$", html.unescape(e[1]))]
+          pick = (daily or entries)[0]
+          data = {"id": pick[0], "title": html.unescape(pick[1]), "published": pick[2]}
+          old = None
+          try: old = json.load(open("latest-video.json"))
+          except Exception: pass
+          if old != data:
+              json.dump(data, open("latest-video.json", "w"), indent=2)
+              print("updated:", data)
+          else:
+              print("no change:", data)
+          PY
+      - name: Commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain latest-video.json)" ]]; then
+            git config user.name "site-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add latest-video.json
+            git commit -m "Latest daily episode"
+            git push
+          fi
