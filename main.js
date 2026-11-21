@@ -66,3 +66,26 @@
       .finally(function () { btn.disabled = false; });
   });
 })();
+
+/* Latest Spotify episode: today's thumbnail and title via Spotify oEmbed (CORS-enabled, no key). */
+(function(){
+  var box=document.getElementById('spotify-latest'); if(!box) return;
+  var show=box.getAttribute('data-show');
+  var showUrl='https://open.spotify.com/show/'+show;
+  var player='https://open.spotify.com/embed/show/'+show+'/video?utm_source=generator&theme=0&autoplay=1';
+  var img=box.querySelector('.sp-thumb'), title=document.getElementById('spotify-title');
+  fetch('https://open.spotify.com/oembed?url='+encodeURIComponent(showUrl))
+    .then(function(r){return r.ok?r.json():Promise.reject();})
+    .then(function(d){
+      if(d.thumbnail_url){img.src=d.thumbnail_url;img.hidden=false;}
+      if(d.title&&title){title.textContent=d.title;}
+      if(d.iframe_url){player=d.iframe_url+(d.iframe_url.indexOf('?')>-1?'&':'?')+'theme=0&autoplay=1';}
+    }).catch(function(){});
+  box.querySelector('.sp-poster').addEventListener('click',function(){
+    var f=document.createElement('iframe');
+    f.src=player; f.title='The Kyle Seraphin Show on Spotify';
+    f.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+    f.setAttribute('allowfullscreen','');
+    box.innerHTML=''; box.appendChild(f);
+  });
+})();

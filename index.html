@@ -73,10 +73,15 @@
           <h2 id="listen-h">Latest Episode</h2>
           <a class="more" href="https://open.spotify.com/show/4fXy1ZS7jARmpS8XIONrwF" target="_blank" rel="noopener">All episodes on Spotify →</a>
         </div>
-        <!-- Spotify SHOW embed: always shows the newest episode automatically -->
-        <iframe class="spotify" title="The Kyle Seraphin Show on Spotify"
-          src="https://open.spotify.com/embed/show/4fXy1ZS7jARmpS8XIONrwF?utm_source=generator&theme=0"
-          height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        <!-- Latest Spotify episode: main.js pulls today's thumbnail + title from Spotify oEmbed; click loads the player -->
+        <div class="video spotify-video" id="spotify-latest" data-show="4fXy1ZS7jARmpS8XIONrwF">
+          <button class="sp-poster" type="button" aria-label="Play the latest episode on Spotify">
+            <img class="sp-thumb" alt="" hidden>
+            <span class="sp-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span>
+            <span class="sp-badge"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="#1DB954" d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm5.5 17.3a.75.75 0 0 1-1 .25c-2.85-1.74-6.45-2.14-10.68-1.17a.75.75 0 1 1-.33-1.46c4.63-1.06 8.6-.6 11.77 1.34.36.22.47.69.25 1.04zm1.47-3.27a.94.94 0 0 1-1.29.31c-3.26-2-8.24-2.59-12.1-1.42a.94.94 0 1 1-.54-1.8c4.41-1.34 9.9-.69 13.62 1.6.44.27.58.85.31 1.3zm.13-3.4C15.2 8.3 8.77 8.08 5.05 9.21a1.13 1.13 0 1 1-.65-2.16c4.27-1.3 11.37-1.04 15.86 1.62a1.13 1.13 0 0 1-1.16 1.95z"/></svg>Spotify</span>
+          </button>
+        </div>
+        <p class="sp-title" id="spotify-title">The newest episode of The Kyle Seraphin Show</p>
       </section>
 
       <section id="watch" class="section card" aria-labelledby="watch-h">
