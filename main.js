@@ -1,0 +1,68 @@
+(function () {
+  // ---- Sponsor & affiliate cards ----
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function card(s) {
+    var c = el('article', 'sponsor');
+    var tile = el('div', 'sponsor-tile' + (s.tile === 'light' ? ' light' : ''));
+    if (s.logo) {
+      var img = el('img', 'sponsor-logo' + (s.wide ? ' wide' : '')); img.src = s.logo; img.alt = s.name + ' logo'; img.loading = 'lazy'; img.decoding = 'async';
+      tile.appendChild(img);
+    } else {
+      var mono = el('span', 'monogram', s.monogram || s.name.slice(0, 2).toUpperCase()); mono.setAttribute('aria-hidden', 'true');
+      tile.appendChild(mono);
+    }
+    c.appendChild(tile);
+    var body = el('div', 'sponsor-body');
+    body.appendChild(el('h4', 'sponsor-name', s.name));
+    body.appendChild(el('p', 'sponsor-blurb', s.blurb));
+    c.appendChild(body);
+    var bottom = el('div', 'sponsor-bottom');
+    if (s.code) {
+      var code = el('button', 'code'); code.type = 'button';
+      code.setAttribute('aria-label', 'Copy promo code ' + s.code);
+      code.innerHTML = '<span class="code-label">Code</span> <strong></strong> <span class="copy">Copy</span>';
+      code.querySelector('strong').textContent = s.code;
+      code.addEventListener('click', function () {
+        var done = function () { code.querySelector('.copy').textContent = 'Copied!'; setTimeout(function () { code.querySelector('.copy').textContent = 'Copy'; }, 1600); };
+        if (navigator.clipboard) navigator.clipboard.writeText(s.code).then(done, done); else done();
+      });
+      bottom.appendChild(code);
+    } else {
+      bottom.appendChild(el('span', 'link-note', 'Use this link'));
+    }
+    var a = el('a', 'btn btn-primary', s.cta || 'Shop now'); a.href = s.url || '#'; a.target = '_blank'; a.rel = 'noopener sponsored';
+    a.setAttribute('aria-label', (s.cta || 'Shop now') + ': ' + s.name);
+    bottom.appendChild(a); c.appendChild(bottom);
+    return c;
+  }
+  [['sponsor-grid', window.SPONSORS], ['affiliate-grid', window.AFFILIATES]].forEach(function (g) {
+    var grid = document.getElementById(g[0]); if (!grid) return;
+    (g[1] || []).forEach(function (s) { grid.appendChild(card(s)); });
+    if (!(g[1] || []).length && grid.parentNode) grid.parentNode.hidden = true;
+  });
+  var upd = document.getElementById('sponsors-updated');
+  if (upd && window.SPONSORS_UPDATED) upd.textContent = 'Updated ' + window.SPONSORS_UPDATED;
+
+  // ---- Footer year ----
+  var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+
+  // ---- Contact form (Web3Forms) ----
+  var form = document.getElementById('contact-form');
+  var status = document.getElementById('form-status');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { status.textContent = 'Please fill in your name, a valid email, and a message.'; status.className = 'form-status err'; form.reportValidity && form.reportValidity(); return; }
+    if (form.botcheck.checked) return; // honeypot tripped
+    var btn = form.querySelector('button[type=submit]');
+    btn.disabled = true; status.textContent = 'Sending…'; status.className = 'form-status';
+    fetch(form.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.success) { form.reset(); status.textContent = 'Thanks! Your message is on its way.'; status.className = 'form-status ok'; }
+        else { throw new Error(d.message || 'error'); }
+      })
+      .catch(function () { status.textContent = 'Something went wrong. Please email info@KyleSeraphin.com directly.'; status.className = 'form-status err'; })
+      .finally(function () { btn.disabled = false; });
+  });
+})();
