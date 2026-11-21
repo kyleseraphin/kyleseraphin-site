@@ -1,4 +1,4 @@
-name: Update latest daily episode
+name: Update latest daily episode and chart rank
 on:
   schedule:
     - cron: "*/20 * * * *"   # every 20 minutes
@@ -29,12 +29,55 @@ jobs:
           else:
               print("no change:", data)
           PY
+      - name: Newest Tackleberry Project video
+        run: |
+          python3 - <<'PY'
+          import json, re, urllib.request, html
+          url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCzAFNeiCv71U3TBxLpDiC6g"
+          try:
+              xml = urllib.request.urlopen(url, timeout=30).read().decode("utf-8")
+          except Exception as e:
+              print("tackleberry fetch failed, keeping old file:", e); raise SystemExit(0)
+          entries = re.findall(r"<entry>.*?<yt:videoId>(.*?)</yt:videoId>.*?<title>(.*?)</title>.*?<published>(.*?)</published>", xml, re.S)
+          if not entries: raise SystemExit(0)
+          pick = entries[0]
+          data = {"id": pick[0], "title": html.unescape(pick[1]), "published": pick[2]}
+          old = None
+          try: old = json.load(open("tackleberry-video.json"))
+          except Exception: pass
+          if old != data:
+              json.dump(data, open("tackleberry-video.json", "w"), indent=2); print("updated:", data)
+          else:
+              print("no change:", data)
+          PY
+      - name: Apple Podcasts chart rank (US, Politics, top 200)
+        run: |
+          python3 - <<'PY'
+          import json, urllib.request, datetime
+          SHOW_ID = "1654162813"
+          url = "https://itunes.apple.com/us/rss/toppodcasts/limit=200/genre=1527/json"
+          try:
+              d = json.load(urllib.request.urlopen(url, timeout=30))
+              entries = d["feed"].get("entry", [])
+          except Exception as e:
+              print("chart fetch failed, keeping old file:", e); raise SystemExit(0)
+          rank = next((i for i, x in enumerate(entries, 1) if x["id"]["attributes"].get("im:id") == SHOW_ID), None)
+          data = {"rank": rank, "category": "Politics", "country": "US", "platform": "Apple Podcasts",
+                  "date": datetime.date.today().isoformat()}
+          old = None
+          try: old = json.load(open("chart-rank.json"))
+          except Exception: pass
+          if not old or old.get("rank") != rank or old.get("date") != data["date"]:
+              json.dump(data, open("chart-rank.json", "w"), indent=2); print("updated:", data)
+          else:
+              print("no change:", data)
+          PY
       - name: Commit if changed
         run: |
-          if [[ -n "$(git status --porcelain latest-video.json)" ]]; then
+          if [[ -n "$(git status --porcelain latest-video.json chart-rank.json tackleberry-video.json)" ]]; then
             git config user.name "site-bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add latest-video.json
-            git commit -m "Latest daily episode"
+            git add latest-video.json chart-rank.json tackleberry-video.json
+            git commit -m "Update latest episodes / chart rank"
             git push
           fi
