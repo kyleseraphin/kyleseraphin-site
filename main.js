@@ -131,3 +131,16 @@
       a.hidden=false;
     }).catch(function(){});
 })();
+
+/* Latest Tackleberry Project video: tackleberry-video.json is refreshed by the GitHub Action. */
+(function(){
+  var f=document.getElementById('tb-latest'); if(!f) return;
+  fetch('tackleberry-video.json?t='+Math.floor(Date.now()/600000),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():Promise.reject();})
+    .then(function(d){
+      if(d&&/^[A-Za-z0-9_-]{11}$/.test(d.id)){
+        f.src='https://www.youtube-nocookie.com/embed/'+d.id+'?rel=0';
+        if(d.title){f.title=d.title;var t=document.getElementById('tb-title');if(t)t.textContent=d.title;}
+      }
+    }).catch(function(){});
+})();
