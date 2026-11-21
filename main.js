@@ -102,3 +102,17 @@
       }
     }).catch(function(){});
 })();
+
+/* Combined follower count from followers.js */
+(function(){
+  var F=window.FOLLOWERS; if(!F||!F.platforms) return;
+  var total=F.platforms.reduce(function(a,p){return a+(+p.count||0);},0);
+  var fmt=function(k){return k>=1000?(Math.round(k/100)/10)+'M':(Math.round(k*10)/10)+'K';};
+  var n=document.getElementById('reach-num'); if(n) n.textContent=fmt(total);
+  var ul=document.getElementById('reach-list'); if(!ul) return;
+  ul.innerHTML='';
+  F.platforms.forEach(function(p){
+    var li=document.createElement('li'); li.textContent=p.name;
+    var b=document.createElement('b'); b.textContent=fmt(+p.count); li.appendChild(b); ul.appendChild(li);
+  });
+})();

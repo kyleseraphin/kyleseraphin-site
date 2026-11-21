@@ -143,3 +143,20 @@ textarea{resize:vertical;min-height:120px}
 .spotify-video .sp-poster:hover .sp-play{transform:translate(-50%,-50%) scale(1.08)}
 .spotify-video .sp-badge{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;align-items:center;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.7);color:#fff;font-size:12px;font-weight:700}
 .sp-title{margin:10px 0 0;font-size:14px;line-height:1.4;color:var(--muted)}
+
+/* Combined follower count */
+.reach{margin-top:14px}
+.reach-total{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+#reach-num{font-size:34px;font-weight:900;line-height:1;color:var(--text);letter-spacing:-.01em}
+.reach-label{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.reach-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.reach-list li{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted)}
+.reach-list li b{color:var(--text);font-weight:800;margin-left:4px}
+@media (max-width:720px){.reach{text-align:center}.reach-total,.reach-list{justify-content:center}}
+
+/* About + topics (SEO) */
+.about h2{margin:0 0 10px}
+.about p{margin:0;color:var(--muted);line-height:1.6;max-width:80ch}
+.about p strong{color:var(--text)}
+.topics{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.topics li{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(239,32,32,.12);border:1px solid rgba(239,32,32,.35);color:var(--text)}
