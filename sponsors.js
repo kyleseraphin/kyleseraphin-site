@@ -47,5 +47,8 @@ window.AFFILIATES = [
     logo: "assets/sponsors/replicator-usa.svg", wide: true },
   { name: "MattHat Jerky", code: "", url: "https://matthatjerky.com/Kyle",
     blurb: "The Seraphin house's favorite beef jerky. Try Roasted Garlic and Black Truffle.",
-    logo: "assets/sponsors/matthat-jerky.png", wide: true }
+    logo: "assets/sponsors/matthat-jerky.png", wide: true },
+  { name: "GPNVGs", code: "", url: "https://wp.gpnvgs.com/?ref=26",
+    blurb: "Night vision, thermal optics, and tactical gear. Lifetime warranty, price matching, and free shipping.",
+    logo: "assets/sponsors/gpnvgs.png" }
 ];
